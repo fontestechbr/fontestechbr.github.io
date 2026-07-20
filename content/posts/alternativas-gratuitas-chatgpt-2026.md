@@ -1,6 +1,6 @@
 ---
 title: "7 Alternativas Gratuitas ao ChatGPT em 2026 (Melhores Opções)"
-date: 2026-07-20T09:00:00-03:00
+date: 2026-07-19T14:00:00-03:00
 description: "Conheça as melhores alternativas gratuitas ao ChatGPT em 2026. Compare ferramentas de IA que você pode usar sem pagar nada, com recursos incríveis."
 tags: ["chatgpt", "ia gratuita", "alternativas", "ferramentas ia"]
 categorias: ["ferramentas"]
