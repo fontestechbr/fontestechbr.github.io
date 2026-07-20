@@ -1,0 +1,30 @@
+{{ define "main" }}
+<section class="posts-list">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ range .Paginator.Pages }}
+    <article class="post-card">
+        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        <div class="post-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
+            {{ if .ReadingTime }}<span class="reading-time">· {{ .ReadingTime }} min de leitura</span>{{ end }}
+        </div>
+        <p class="post-excerpt">{{ .Description }}</p>
+    </article>
+    {{ end }}
+
+    <!-- Pagination -->
+    {{ $paginator := .Paginator }}
+    {{ if gt $paginator.TotalPages 1 }}
+    <nav class="pagination" aria-label="Paginação">
+        {{ if $paginator.HasPrev }}
+        <a href="{{ $paginator.Prev.URL }}" rel="prev">← Anterior</a>
+        {{ end }}
+        <span>Página {{ $paginator.PageNumber }} de {{ $paginator.TotalPages }}</span>
+        {{ if $paginator.HasNext }}
+        <a href="{{ $paginator.Next.URL }}" rel="next">Próxima →</a>
+        {{ end }}
+    </nav>
+    {{ end }}
+</section>
+{{ end }}

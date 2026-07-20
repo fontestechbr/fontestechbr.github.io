@@ -1,0 +1,58 @@
+baseURL = "https://fontesrubens4.github.io/"
+languageCode = "pt-br"
+title = "TechFácil - Dicas de IA e Tecnologia"
+theme = ""
+paginate = 10
+enableRobotsTXT = true
+enableEmoji = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "monokai"
+    lineNos = false
+
+[params]
+  description = "Aprenda a usar Inteligência Artificial e ferramentas de tecnologia de forma prática e gratuita. Tutoriais, dicas e guias para iniciantes."
+  author = "TechFácil"
+  keywords = ["inteligência artificial", "IA", "tecnologia", "tutoriais", "ferramentas gratuitas", "ChatGPT", "produtividade"]
+  dateFormat = "2 de January de 2006"
+  showReadingTime = true
+  googleAnalytics = ""
+  adsenseId = ""
+
+[sitemap]
+  changefreq = "daily"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[outputFormats.JSON]
+  mediaType = "application/json"
+  baseName = "index"
+
+[taxonomies]
+  tag = "tags"
+  category = "categorias"
+
+[menu]
+  [[menu.main]]
+    name = "Início"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Tutoriais IA"
+    url = "/categorias/tutoriais-ia/"
+    weight = 2
+  [[menu.main]]
+    name = "Ferramentas"
+    url = "/categorias/ferramentas/"
+    weight = 3
+  [[menu.main]]
+    name = "Dicas"
+    url = "/categorias/dicas/"
+    weight = 4

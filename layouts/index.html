@@ -1,0 +1,27 @@
+{{ define "main" }}
+<section class="hero">
+    <h2>Domine a Inteligência Artificial sem gastar nada</h2>
+    <p>Tutoriais práticos, ferramentas gratuitas e dicas para usar IA no seu dia a dia.</p>
+</section>
+
+<section class="posts-list">
+    <h2>Últimos Artigos</h2>
+    {{ range first 20 (where .Site.RegularPages "Section" "posts") }}
+    <article class="post-card">
+        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        <div class="post-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
+            {{ if .ReadingTime }}<span class="reading-time">· {{ .ReadingTime }} min de leitura</span>{{ end }}
+        </div>
+        <p class="post-excerpt">{{ .Description }}</p>
+        {{ if .Params.tags }}
+        <div class="post-tags">
+            {{ range .Params.tags }}
+            <a href="{{ "tags/" | relURL }}{{ . | urlize }}/" class="tag">#{{ . }}</a>
+            {{ end }}
+        </div>
+        {{ end }}
+    </article>
+    {{ end }}
+</section>
+{{ end }}

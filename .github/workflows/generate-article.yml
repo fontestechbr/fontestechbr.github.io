@@ -1,0 +1,80 @@
+name: Generate Daily Article
+
+on:
+  schedule:
+    # Gera um artigo novo todos os dias às 7h UTC (4h BRT)
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+    inputs:
+      title:
+        description: 'Título do artigo (deixe vazio para auto-gerar)'
+        required: false
+      keyword:
+        description: 'Palavra-chave principal'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Generate article
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          chmod +x scripts/generate_article.sh
+          
+          # Se título foi passado manualmente
+          if [ -n "${{ github.event.inputs.title }}" ]; then
+            ./scripts/generate_article.sh "${{ github.event.inputs.title }}" "${{ github.event.inputs.keyword }}"
+          else
+            # Pegar um tema aleatório da lista
+            TOPICS=(
+              "Como Usar IA para Organizar Sua Rotina|ia organizar rotina"
+              "Melhores Apps de IA para Android Grátis|apps ia android gratis"
+              "Como a IA Está Mudando o Mercado de Trabalho|ia mercado trabalho"
+              "Ferramentas de IA para Criar Música Grátis|ia criar musica gratis"
+              "Como Usar IA para Aprender Inglês|ia aprender ingles"
+              "10 Prompts de IA para Redes Sociais|prompts ia redes sociais"
+              "Como Criar Vídeos com IA Gratuitamente|criar videos ia gratis"
+              "IA para Empreendedores: Guia Prático|ia empreendedores dicas"
+              "Como Usar NotebookLM do Google|notebooklm google como usar"
+              "Melhores IAs para Traduzir Textos em 2026|ia traduzir textos"
+              "Como Automatizar Tarefas com IA|automatizar tarefas ia"
+              "IA para Designers: Ferramentas Gratuitas|ia designers ferramentas"
+              "Como Usar IA para Planejar Viagens|ia planejar viagens"
+              "Melhores Chatbots de IA para Whatsapp|chatbot ia whatsapp"
+              "Como a IA Pode Ajudar Professores|ia para professores educacao"
+            )
+            
+            # Selecionar tema baseado no dia do ano
+            DAY_OF_YEAR=$(date +%j)
+            INDEX=$((DAY_OF_YEAR % ${#TOPICS[@]}))
+            TOPIC="${TOPICS[$INDEX]}"
+            
+            TITLE=$(echo "$TOPIC" | cut -d'|' -f1)
+            KEYWORD=$(echo "$TOPIC" | cut -d'|' -f2)
+            
+            ./scripts/generate_article.sh "$TITLE" "$KEYWORD"
+          fi
+
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action - Auto Article"
+          git add content/posts/
+          
+          if git diff --staged --quiet; then
+            echo "Nenhum artigo novo para commitar"
+          else
+            git commit -m "📝 Novo artigo publicado automaticamente"
+            git push
+          fi
