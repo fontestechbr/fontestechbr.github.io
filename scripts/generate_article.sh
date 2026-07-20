@@ -5,7 +5,7 @@
 set -e
 
 CONTENT_DIR="content/posts"
-DATE=$(date +%Y-%m-%dT%H:%M:%S-03:00)
+DATE=$(date -u +%Y-%m-%dT%H:%M:%S+00:00)
 SLUG=$(echo "$1" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g' | sed 's/[^a-z0-9-]//g')
 
 # Verificar se GEMINI_API_KEY está configurada

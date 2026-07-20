@@ -1,6 +1,6 @@
 ---
 title: "Como Usar IA para Organizar Sua Rotina Diária"
-date: 2026-07-20T13:01:20-03:00
+date: 2026-07-20T08:00:00+00:00
 description: "Você já sentiu que o seu dia tem mais tarefas do que horas disponíveis? Aquela sensação de que, mesmo correndo contra o tempo, a lista de afazeres só"
 tags: ["ia", "organizar", "rotina"]
 categorias: ["tutoriais-ia"]

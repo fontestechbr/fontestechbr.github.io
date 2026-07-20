@@ -1,6 +1,6 @@
 ---
 title: "5 Ferramentas de IA para Editar Fotos Grátis em 2026"
-date: 2026-07-20T13:05:50-03:00
+date: 2026-07-20T09:00:00+00:00
 description: "Se você é como eu, provavelmente já perdeu horas tentando remover aquele intruso que apareceu no fundo da sua foto favorita ou lutando com filtros que n"
 tags: ["editar", "fotos", "ia", "gratis"]
 categorias: ["tutoriais-ia"]
