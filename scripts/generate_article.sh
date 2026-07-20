@@ -44,39 +44,65 @@ Requisitos:
 
 Retorne APENAS o conteúdo do artigo em Markdown, sem front matter, sem bloco de código envolvendo tudo."
 
-# Chamar API do Gemini (com retry para rate limit)
+# Preparar o body da requisição
+REQUEST_BODY=$(jq -n --arg prompt "$PROMPT" '{
+  "contents": [{"parts":[{"text": $prompt}]}],
+  "generationConfig": {
+    "temperature": 0.8,
+    "maxOutputTokens": 4096
+  }
+}')
+
+# Tentar múltiplos modelos em ordem de preferência
+MODELS=("gemini-2.0-flash" "gemini-2.0-flash-lite" "gemini-1.5-flash-latest" "gemini-pro")
 MAX_RETRIES=3
-RETRY_DELAY=20
+SUCCESS=false
 RESPONSE=""
 
-for i in $(seq 1 $MAX_RETRIES); do
-    RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$GEMINI_API_KEY" \
-      -H 'Content-Type: application/json' \
-      -d "{
-        \"contents\": [{
-          \"parts\":[{\"text\": $(echo "$PROMPT" | jq -Rs .)}]
-        }],
-        \"generationConfig\": {
-          \"temperature\": 0.8,
-          \"maxOutputTokens\": 4096
-        }
-      }")
+for MODEL in "${MODELS[@]}"; do
+    echo "   🔍 Tentando modelo: $MODEL"
+    RETRY_DELAY=30
     
-    # Verificar se é erro de rate limit
-    if echo "$RESPONSE" | jq -e '.error.code == 429' > /dev/null 2>&1; then
-        echo "   ⏳ Rate limit atingido. Tentativa $i/$MAX_RETRIES. Aguardando ${RETRY_DELAY}s..."
-        sleep $RETRY_DELAY
-        RETRY_DELAY=$((RETRY_DELAY * 2))
-    else
-        break
-    fi
+    for i in $(seq 1 $MAX_RETRIES); do
+        RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=$GEMINI_API_KEY" \
+          -H 'Content-Type: application/json' \
+          -d "$REQUEST_BODY")
+        
+        ERROR_CODE=$(echo "$RESPONSE" | jq -r '.error.code // empty')
+        
+        # Se não houve erro, sucesso!
+        if [ -z "$ERROR_CODE" ]; then
+            echo "   ✅ Modelo $MODEL funcionou!"
+            SUCCESS=true
+            break 2
+        fi
+        
+        # Se 429 (rate limit), tentar novamente com delay
+        if [ "$ERROR_CODE" = "429" ]; then
+            echo "   ⏳ Rate limit ($MODEL). Tentativa $i/$MAX_RETRIES. Aguardando ${RETRY_DELAY}s..."
+            sleep $RETRY_DELAY
+            RETRY_DELAY=$((RETRY_DELAY * 2))
+        else
+            # Se 404 ou outro erro, tentar próximo modelo
+            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error.message // "unknown"')
+            echo "   ⚠️ Modelo $MODEL erro $ERROR_CODE: $ERROR_MSG"
+            echo "   ➡️ Tentando próximo modelo..."
+            break
+        fi
+    done
 done
+
+if [ "$SUCCESS" != "true" ]; then
+    echo "❌ Todos os modelos falharam. Última resposta:"
+    echo "$RESPONSE" | jq .
+    exit 1
+fi
 
 # Extrair texto da resposta
 ARTICLE_BODY=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
 
 if [ -z "$ARTICLE_BODY" ]; then
-    echo "❌ Erro ao gerar artigo. Resposta da API:"
+    echo "❌ Erro ao extrair texto da resposta:"
     echo "$RESPONSE" | jq .
     exit 1
 fi
