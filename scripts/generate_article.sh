@@ -44,18 +44,33 @@ Requisitos:
 
 Retorne APENAS o conteúdo do artigo em Markdown, sem front matter, sem bloco de código envolvendo tudo."
 
-# Chamar API do Gemini
-RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_KEY" \
-  -H 'Content-Type: application/json' \
-  -d "{
-    \"contents\": [{
-      \"parts\":[{\"text\": $(echo "$PROMPT" | jq -Rs .)}]
-    }],
-    \"generationConfig\": {
-      \"temperature\": 0.8,
-      \"maxOutputTokens\": 4096
-    }
-  }")
+# Chamar API do Gemini (com retry para rate limit)
+MAX_RETRIES=3
+RETRY_DELAY=20
+RESPONSE=""
+
+for i in $(seq 1 $MAX_RETRIES); do
+    RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$GEMINI_API_KEY" \
+      -H 'Content-Type: application/json' \
+      -d "{
+        \"contents\": [{
+          \"parts\":[{\"text\": $(echo "$PROMPT" | jq -Rs .)}]
+        }],
+        \"generationConfig\": {
+          \"temperature\": 0.8,
+          \"maxOutputTokens\": 4096
+        }
+      }")
+    
+    # Verificar se é erro de rate limit
+    if echo "$RESPONSE" | jq -e '.error.code == 429' > /dev/null 2>&1; then
+        echo "   ⏳ Rate limit atingido. Tentativa $i/$MAX_RETRIES. Aguardando ${RETRY_DELAY}s..."
+        sleep $RETRY_DELAY
+        RETRY_DELAY=$((RETRY_DELAY * 2))
+    else
+        break
+    fi
+done
 
 # Extrair texto da resposta
 ARTICLE_BODY=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
