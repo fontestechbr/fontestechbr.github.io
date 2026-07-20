@@ -57,6 +57,11 @@
     {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
     {{ end }}
     
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Styles -->
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
     
@@ -67,11 +72,11 @@
 </head>
 <body>
     <header class="site-header">
-        <div class="container">
-            <a href="{{ .Site.BaseURL }}" class="site-logo">
-                <h1>{{ .Site.Title }}</h1>
+        <div class="header-inner">
+            <a href="{{ .Site.BaseURL }}" class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Fontes<span class="logo-highlight">Tech</span></span>
             </a>
-            <p class="site-tagline">Aprenda IA e tecnologia de forma simples e prática</p>
             <nav class="main-nav" aria-label="Navegação principal">
                 {{ range .Site.Menus.main }}
                 <a href="{{ .URL }}" {{ if eq $.RelPermalink .URL }}class="active" aria-current="page"{{ end }}>{{ .Name }}</a>
@@ -81,14 +86,22 @@
     </header>
 
     <main class="site-main">
-        <div class="container">
-            {{ block "main" . }}{{ end }}
-        </div>
+        {{ block "main" . }}{{ end }}
     </main>
 
     <footer class="site-footer">
-        <div class="container">
-            <p>&copy; {{ now.Year }} {{ .Site.Title }}. Conteúdo criado para ajudar você a dominar a tecnologia.</p>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Fontes<span class="logo-highlight">Tech</span></span>
+            </div>
+            <p class="footer-description">Conteúdo sobre inteligência artificial e tecnologia para quem quer se manter atualizado.</p>
+            <div class="footer-links">
+                {{ range .Site.Menus.main }}
+                <a href="{{ .URL }}">{{ .Name }}</a>
+                {{ end }}
+            </div>
+            <p class="footer-copy">&copy; {{ now.Year }} FontesTech. Todos os direitos reservados.</p>
         </div>
     </footer>
 </body>

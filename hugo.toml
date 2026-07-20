@@ -1,6 +1,6 @@
 baseURL = "https://fontestechbr.github.io/"
 languageCode = "pt-br"
-title = "TechFácil - Dicas de IA e Tecnologia"
+title = "FontesTech - IA e Tecnologia"
 # theme = "" # Usando layouts customizados sem tema externo
 paginate = 10
 enableRobotsTXT = true
@@ -16,7 +16,7 @@ enableEmoji = true
 
 [params]
   description = "Aprenda a usar Inteligência Artificial e ferramentas de tecnologia de forma prática e gratuita. Tutoriais, dicas e guias para iniciantes."
-  author = "TechFácil"
+  author = "FontesTech"
   keywords = ["inteligência artificial", "IA", "tecnologia", "tutoriais", "ferramentas gratuitas", "ChatGPT", "produtividade"]
   dateFormat = "2 de January de 2006"
   showReadingTime = true

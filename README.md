@@ -1,4 +1,4 @@
-# TechFácil - Blog de IA e Tecnologia
+# FontesTech - Blog de IA e Tecnologia
 
 Blog automatizado sobre Inteligência Artificial e Tecnologia, otimizado para SEO e monetização com Google AdSense.
 

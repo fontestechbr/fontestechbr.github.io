@@ -4,12 +4,14 @@
     {{ .Content }}
     {{ range .Paginator.Pages }}
     <article class="post-card">
-        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-        <div class="post-meta">
-            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
-            {{ if .ReadingTime }}<span class="reading-time">· {{ .ReadingTime }} min de leitura</span>{{ end }}
+        <div class="post-card-content">
+            <div class="post-card-meta">
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
+                {{ if .ReadingTime }}<span class="dot">·</span><span>{{ .ReadingTime }} min</span>{{ end }}
+            </div>
+            <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+            <p class="post-card-excerpt">{{ .Description }}</p>
         </div>
-        <p class="post-excerpt">{{ .Description }}</p>
     </article>
     {{ end }}
 

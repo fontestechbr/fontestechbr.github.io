@@ -1,27 +1,38 @@
 {{ define "main" }}
 <section class="hero">
-    <h2>Domine a Inteligência Artificial sem gastar nada</h2>
-    <p>Tutoriais práticos, ferramentas gratuitas e dicas para usar IA no seu dia a dia.</p>
+    <div class="hero-content">
+        <span class="hero-badge">🤖 Blog de IA & Tecnologia</span>
+        <h1>Domine a Inteligência Artificial<br><span class="hero-gradient">sem gastar nada</span></h1>
+        <p class="hero-subtitle">Tutoriais práticos, ferramentas gratuitas e dicas para usar IA no trabalho, nos estudos e no dia a dia.</p>
+    </div>
 </section>
 
-<section class="posts-list">
-    <h2>Últimos Artigos</h2>
-    {{ range first 20 (where .Site.RegularPages "Section" "posts") }}
-    <article class="post-card">
-        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-        <div class="post-meta">
-            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
-            {{ if .ReadingTime }}<span class="reading-time">· {{ .ReadingTime }} min de leitura</span>{{ end }}
-        </div>
-        <p class="post-excerpt">{{ .Description }}</p>
-        {{ if .Params.tags }}
-        <div class="post-tags">
-            {{ range .Params.tags }}
-            <a href="{{ "tags/" | relURL }}{{ . | urlize }}/" class="tag">#{{ . }}</a>
-            {{ end }}
-        </div>
+<section class="content-section">
+    <div class="section-header">
+        <h2>Artigos Recentes</h2>
+        <p>Conteúdo novo toda semana sobre as melhores ferramentas de IA</p>
+    </div>
+    
+    <div class="posts-grid">
+        {{ range first 20 (where .Site.RegularPages "Section" "posts") }}
+        <article class="post-card">
+            <div class="post-card-content">
+                <div class="post-card-meta">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
+                    {{ if .ReadingTime }}<span class="dot">·</span><span>{{ .ReadingTime }} min</span>{{ end }}
+                </div>
+                <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+                <p class="post-card-excerpt">{{ .Description }}</p>
+                {{ if .Params.tags }}
+                <div class="post-card-tags">
+                    {{ range first 3 .Params.tags }}
+                    <span class="tag">{{ . }}</span>
+                    {{ end }}
+                </div>
+                {{ end }}
+            </div>
+        </article>
         {{ end }}
-    </article>
-    {{ end }}
+    </div>
 </section>
 {{ end }}

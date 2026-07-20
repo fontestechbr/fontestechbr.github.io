@@ -1,45 +1,68 @@
 {{ define "main" }}
 <article class="post-single" itemscope itemtype="https://schema.org/Article">
-    <header class="post-header">
-        <h1 itemprop="headline">{{ .Title }}</h1>
-        <div class="post-meta">
-            <time datetime="{{ .Date.Format "2006-01-02" }}" itemprop="datePublished">{{ .Date.Format "02/01/2006" }}</time>
-            {{ if .ReadingTime }}<span class="reading-time">· {{ .ReadingTime }} min de leitura</span>{{ end }}
-        </div>
-        {{ if .Params.tags }}
-        <div class="post-tags">
-            {{ range .Params.tags }}
-            <a href="{{ "tags/" | relURL }}{{ . | urlize }}/" class="tag">#{{ . }}</a>
+    <div class="post-container">
+        <header class="post-header">
+            {{ if .Params.tags }}
+            <div class="post-category">
+                {{ range first 1 .Params.tags }}
+                <span>{{ . }}</span>
+                {{ end }}
+            </div>
             {{ end }}
-        </div>
-        {{ end }}
-    </header>
+            <h1 itemprop="headline">{{ .Title }}</h1>
+            <div class="post-meta">
+                <div class="post-author">
+                    <span class="author-avatar">⚡</span>
+                    <div>
+                        <span class="author-name">FontesTech</span>
+                        <span class="post-date">
+                            <time datetime="{{ .Date.Format "2006-01-02" }}" itemprop="datePublished">{{ .Date.Format "02 Jan, 2006" }}</time>
+                            {{ if .ReadingTime }}<span class="dot">·</span>{{ .ReadingTime }} min de leitura{{ end }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-    <div class="post-content" itemprop="articleBody">
-        {{ .Content }}
+        <div class="post-content" itemprop="articleBody">
+            {{ .Content }}
+        </div>
+
+        <footer class="post-footer">
+            {{ if .Params.tags }}
+            <div class="post-tags-footer">
+                {{ range .Params.tags }}
+                <a href="{{ "tags/" | relURL }}{{ . | urlize }}/" class="tag">{{ . }}</a>
+                {{ end }}
+            </div>
+            {{ end }}
+            
+            <div class="post-share">
+                <span>Compartilhar:</span>
+                <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" target="_blank" rel="noopener noreferrer" class="share-btn share-twitter" aria-label="Compartilhar no Twitter">𝕏</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" target="_blank" rel="noopener noreferrer" class="share-btn share-facebook" aria-label="Compartilhar no Facebook">f</a>
+                <a href="https://wa.me/?text={{ .Title }}%20{{ .Permalink }}" target="_blank" rel="noopener noreferrer" class="share-btn share-whatsapp" aria-label="Compartilhar no WhatsApp">w</a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ .Permalink }}" target="_blank" rel="noopener noreferrer" class="share-btn share-linkedin" aria-label="Compartilhar no LinkedIn">in</a>
+            </div>
+        </footer>
     </div>
-
-    <footer class="post-footer">
-        <div class="post-share">
-            <p>Gostou? Compartilhe:</p>
-            <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" target="_blank" rel="noopener noreferrer">Twitter</a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" target="_blank" rel="noopener noreferrer">Facebook</a>
-            <a href="https://wa.me/?text={{ .Title }}%20{{ .Permalink }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-        </div>
-    </footer>
 </article>
 
 <!-- Artigos Relacionados -->
-{{ $related := .Site.RegularPages.Related . | first 5 }}
+{{ $related := .Site.RegularPages.Related . | first 3 }}
 {{ with $related }}
-<section class="related-posts">
-    <h2>Artigos Relacionados</h2>
-    {{ range . }}
-    <article class="post-card">
-        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-        <p>{{ .Description }}</p>
-    </article>
-    {{ end }}
+<section class="related-section">
+    <div class="post-container">
+        <h2>Continue Lendo</h2>
+        <div class="related-grid">
+            {{ range . }}
+            <article class="related-card">
+                <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+                <p>{{ .Description | truncate 100 }}</p>
+            </article>
+            {{ end }}
+        </div>
+    </div>
 </section>
 {{ end }}
 {{ end }}
