@@ -54,7 +54,7 @@ REQUEST_BODY=$(jq -n --arg prompt "$PROMPT" '{
 }')
 
 # Tentar múltiplos modelos em ordem de preferência
-MODELS=("gemini-2.0-flash" "gemini-2.0-flash-lite" "gemini-1.5-flash-latest" "gemini-pro")
+MODELS=("gemini-3.1-flash-lite" "gemini-2.0-flash" "gemini-2.0-flash-lite")
 MAX_RETRIES=3
 SUCCESS=false
 RESPONSE=""
