@@ -1,7 +1,7 @@
 ---
 title: "Como automatizar tarefas no PC com IA: Guia para iniciantes"
 date: 2026-07-23T12:15:10+00:00
-description: "Você já sentiu que está perdendo tempo demais com tarefas repetitivas no computador? Aquele famoso "copia e cola", o preenchimento de planilhas intermin"
+description: "Você já sentiu que está perdendo tempo demais com tarefas repetitivas no computador? Aquele famoso copia e cola, o preenchimento de planilhas intermin"
 tags: ["automatizar", "tarefas", "com", "inteligência", "artificial"]
 categorias: ["tutoriais-ia"]
 keywords: ["automatizar tarefas com inteligência artificial", "Como automatizar tarefas no PC com IA: Guia para iniciantes"]

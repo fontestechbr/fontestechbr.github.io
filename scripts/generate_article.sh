@@ -107,18 +107,21 @@ if [ -z "$ARTICLE_BODY" ]; then
     exit 1
 fi
 
-# Gerar description curta
-DESCRIPTION=$(echo "$ARTICLE_BODY" | head -5 | tr '\n' ' ' | cut -c1-155)
+# Gerar description curta (escapar aspas para não quebrar YAML)
+DESCRIPTION=$(echo "$ARTICLE_BODY" | head -5 | tr '\n' ' ' | cut -c1-155 | sed 's/"//g')
+
+# Escapar aspas no título também
+SAFE_TITLE=$(echo "$TITLE" | sed 's/"/\\"/g')
 
 # Criar arquivo com front matter
 cat > "$CONTENT_DIR/$SLUG.md" << EOF
 ---
-title: "$TITLE"
+title: "$SAFE_TITLE"
 date: $DATE
 description: "$DESCRIPTION"
 tags: [$(echo "$KEYWORD" | sed 's/ /", "/g' | sed 's/^/"/;s/$/"/')]
 categorias: ["tutoriais-ia"]
-keywords: ["$KEYWORD", "$TITLE"]
+keywords: ["$KEYWORD", "$SAFE_TITLE"]
 draft: false
 ---
 
