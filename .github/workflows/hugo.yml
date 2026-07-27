@@ -1,12 +1,7 @@
 name: Deploy Hugo site to Pages
 
 on:
-  push:
-    branches: ["main"]
   workflow_dispatch:
-  schedule:
-    # Publica automaticamente todos os dias às 9h (UTC) = 6h BRT
-    - cron: '0 9 * * *'
 
 permissions:
   contents: read
