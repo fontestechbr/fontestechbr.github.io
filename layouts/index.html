@@ -1,20 +1,77 @@
 {{ define "main" }}
 <section class="hero">
     <div class="hero-content">
-        <span class="hero-badge">🤖 Blog de IA & Tecnologia</span>
-        <h1>Domine a Inteligência Artificial<br><span class="hero-gradient">sem gastar nada</span></h1>
-        <p class="hero-subtitle">Tutoriais práticos, ferramentas gratuitas e dicas para usar IA no trabalho, nos estudos e no dia a dia.</p>
+        <div class="hero-glow"></div>
+        <span class="hero-badge"><span class="badge-dot"></span> Atualizado diariamente com IA</span>
+        <h1>Aprenda <span class="hero-gradient">Inteligência Artificial</span> de forma prática e gratuita</h1>
+        <p class="hero-subtitle">Tutoriais, ferramentas e dicas para usar IA no trabalho, nos estudos e no dia a dia. Novo conteúdo todos os dias.</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number">{{ len (where .Site.RegularPages "Section" "posts") }}+</span>
+                <span class="stat-label">Artigos</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Gratuito</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-number">Daily</span>
+                <span class="stat-label">Updates</span>
+            </div>
+        </div>
     </div>
 </section>
 
+<!-- Categorias -->
+<section class="categories-section">
+    <div class="categories-grid">
+        <a href="/categorias/tutoriais-ia/" class="category-card">
+            <span class="category-icon">🎓</span>
+            <span class="category-name">Tutoriais IA</span>
+        </a>
+        <a href="/categorias/ferramentas/" class="category-card">
+            <span class="category-icon">🛠️</span>
+            <span class="category-name">Ferramentas</span>
+        </a>
+        <a href="/categorias/dicas/" class="category-card">
+            <span class="category-icon">💡</span>
+            <span class="category-name">Dicas</span>
+        </a>
+        <a href="/tags/" class="category-card">
+            <span class="category-icon">🏷️</span>
+            <span class="category-name">Todos os Temas</span>
+        </a>
+    </div>
+</section>
+
+<!-- Artigo Destaque -->
+{{ $featured := first 1 (where .Site.RegularPages "Section" "posts") }}
+{{ range $featured }}
+<section class="featured-section">
+    <div class="featured-card">
+        <span class="featured-label">✨ Mais recente</span>
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        <p>{{ .Description }}</p>
+        <div class="featured-meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02/01/2006" }}</time>
+            {{ if .ReadingTime }}<span class="dot">·</span><span>{{ .ReadingTime }} min de leitura</span>{{ end }}
+        </div>
+        <a href="{{ .Permalink }}" class="featured-btn">Ler artigo →</a>
+    </div>
+</section>
+{{ end }}
+
+<!-- Artigos Recentes -->
 <section class="content-section">
     <div class="section-header">
-        <h2>Artigos Recentes</h2>
-        <p>Conteúdo novo toda semana sobre as melhores ferramentas de IA</p>
+        <h2>Todos os Artigos</h2>
+        <p>Explore nosso conteúdo sobre IA e tecnologia</p>
     </div>
     
     <div class="posts-grid">
-        {{ range first 20 (where .Site.RegularPages "Section" "posts") }}
+        {{ range first 18 (after 1 (where .Site.RegularPages "Section" "posts")) }}
         <article class="post-card">
             <div class="post-card-content">
                 <div class="post-card-meta">
